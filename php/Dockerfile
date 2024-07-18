@@ -1,4 +1,4 @@
-FROM php:8.3-fpm
+FROM php:8.3-apache
 
 # Install system dependencies
 RUN apt-get update && apt-get install -y \
@@ -29,13 +29,17 @@ RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local
 RUN curl -sS https://get.symfony.com/cli/installer | bash
 RUN mv /root/.symfony*/bin/symfony /usr/local/bin/symfony
 
-# Set working directory
-WORKDIR /var/www/html
+# Copy sources to image & Configurer Apache pour Symfony
+ADD ./icalProcessor /var/www/html
+ADD ./apache/vhost.conf /etc/apache2/sites-available/000-default.conf
+RUN a2enmod rewrite
 
-# Set proper permissions for the Symfony application
-#RUN chown -R www-data:www-data /var/www/html/var /var/www/html/vendor /var/www/html/public
-#RUN chmod -R 755 /var/www/html/var /var/www/html/vendor /var/www/html/public
+# Configurer les permissions
+RUN chown -R www-data:www-data /var/www/html/var /var/www/html/vendor /var/www/html/public
+RUN chmod -R 755 /var/www/html/var /var/www/html/vendor /var/www/html/public
 
-# Expose port 9000 and start PHP-FPM server
-EXPOSE 9000
-CMD ["php-fpm"]
+# Exposer le port 80
+EXPOSE 80
+
+# Démarrer Apache en mode frontal
+CMD ["apache2-foreground"]

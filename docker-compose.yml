@@ -1,15 +1,7 @@
 services:
-    nginx:
-        build: ./nginx/
-        ports:
-            - 80:80
-
-        volumes:
-            - ./php/:/var/www/html/
-
     php:
         build: ./php/
-        expose:
-            - 9000
+        ports:
+            - 80:80
         volumes:
             - ./php/:/var/www/html/
