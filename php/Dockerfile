@@ -36,13 +36,15 @@ ADD ./apache/vhost.conf /etc/apache2/sites-available/000-default.conf
 # Configure Apache
 RUN a2enmod rewrite
 
-# Install dependencies
-RUN composer install
-
 # Configurer les permissions
-RUN mkdir -p /var/www/html/var
+RUN mkdir -p /var/www/html/var /var/www/html/vendor /var/www/html/public
 RUN chown -R www-data:www-data /var/www/html/var /var/www/html/vendor /var/www/html/public
 RUN chmod -R 755 /var/www/html/var /var/www/html/vendor /var/www/html/public
+
+USER www-data
+
+# Install dependencies
+RUN composer install
 
 # Exposer le port 80
 EXPOSE 80
