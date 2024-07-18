@@ -36,4 +36,4 @@ jobs:
               with:
                   context: ./php/
                   push: true
-                  tags: ghcr.io/${{ github.repository_owner }}/icalProcessor:latest
+                  tags: ghcr.io/${{ github.repository_owner }}/icalprocessor:latest
