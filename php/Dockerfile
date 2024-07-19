@@ -10,13 +10,17 @@ RUN apt-get update && apt-get install -y \
     unzip \
     zip \
     libonig-dev \
-    libxml2-dev
+    libxml2-dev \
+    libcurl4-openssl-dev \
+    libssl-dev
 
 # Install PHP extensions
 RUN docker-php-ext-install \
     intl \
     zip \
-    opcache
+    opcache \
+    curl \
+    sockets
 
 # Install Xdebug (optional, for debugging purposes)
 RUN pecl install xdebug \
@@ -33,6 +37,8 @@ RUN mv /root/.symfony*/bin/symfony /usr/local/bin/symfony
 ADD ./icalProcessor /var/www/html
 ADD ./apache/vhost.conf /etc/apache2/sites-available/000-default.conf
 
+# Set the ServerName globally to suppress the FQDN warning
+RUN echo "ServerName localhost" >> /etc/apache2/apache2.conf
 # Configure Apache
 RUN a2enmod rewrite
 
