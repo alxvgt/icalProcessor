@@ -36,15 +36,15 @@ ADD ./apache/vhost.conf /etc/apache2/sites-available/000-default.conf
 # Configure Apache
 RUN a2enmod rewrite
 
+# Install dependencies
+ENV COMPOSER_ALLOW_SUPERUSER 1
+RUN composer install
+ENV COMPOSER_ALLOW_SUPERUSER 0
+
 # Configurer les permissions
 RUN mkdir -p /var/www/html/var /var/www/html/vendor /var/www/html/public
 RUN chown -R www-data:www-data /var/www/html/var /var/www/html/vendor /var/www/html/public
 RUN chmod -R 755 /var/www/html/var /var/www/html/vendor /var/www/html/public
-
-USER www-data
-
-# Install dependencies
-RUN composer install
 
 # Démarrer Apache en mode frontal
 CMD ["apache2-foreground"]
