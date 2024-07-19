@@ -2,6 +2,6 @@ services:
     php:
         build: ./php/
         ports:
-            - 80:80
+            - 81:80
         volumes:
-            - ./php/:/var/www/html/
+            - ./php/icalProcessor:/var/www/html/

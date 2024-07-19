@@ -35,7 +35,8 @@ class ProcessorController extends AbstractController
 
         $processedCal = Calendar::create($ical->calendarName())
             ->description($ical->calendarDescription())
-            ->timezone(Timezone::create($ical->calendarTimezone()));
+            ->timezone(Timezone::create($ical->calendarTimezone()))
+            ->withoutAutoTimezoneComponents();
 
         /** @var \ICal\Event $event */
         foreach ($ical->events() as $event) {
@@ -46,6 +47,10 @@ class ProcessorController extends AbstractController
                 ->uniqueIdentifier((string) $event->uid);
             $processedCal->event($event);
         }
+
+        return new Response(
+            content: '<pre>'.$processedCal->toString().'</pre>',
+        );
 
         return new Response(
             content: $processedCal->toString(),
