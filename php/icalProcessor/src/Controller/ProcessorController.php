@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use DateTimeImmutable;
+use DateTimeZone;
 use ICal\ICal;
 use Spatie\IcalendarGenerator\Components\Calendar;
 use Spatie\IcalendarGenerator\Components\Event;
@@ -41,15 +42,15 @@ class ProcessorController extends AbstractController
         /** @var \ICal\Event $event */
         foreach ($ical->events() as $event) {
             $event = Event::create($event->summary)
-                ->startsAt(new DateTimeImmutable($event->dtstart))
-                ->endsAt(new DateTimeImmutable($event->dtend))
+                ->startsAt(new DateTimeImmutable($event->dtstart, new DateTimeZone($ical->calendarTimezone())))
+                ->endsAt(new DateTimeImmutable($event->dtend, new DateTimeZone($ical->calendarTimezone())))
                 ->description((string) $event->description)
                 ->uniqueIdentifier((string) $event->uid);
             $processedCal->event($event);
         }
 
         return new Response(
-            content: '<pre>'.$processedCal->toString().'</pre>',
+            content: '<pre>' . $processedCal->toString() . '</pre>',
         );
 
         return new Response(
