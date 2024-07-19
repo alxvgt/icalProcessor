@@ -46,8 +46,5 @@ USER www-data
 # Install dependencies
 RUN composer install
 
-# Exposer le port 80
-EXPOSE 80
-
 # Démarrer Apache en mode frontal
 CMD ["apache2-foreground"]
