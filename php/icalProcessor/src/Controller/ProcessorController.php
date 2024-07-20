@@ -50,10 +50,6 @@ class ProcessorController extends AbstractController
         }
 
         return new Response(
-            content: '<pre>' . $processedCal->toString() . '</pre>',
-        );
-
-        return new Response(
             content: $processedCal->toString(),
             headers: [
                 'Content-Type' => 'text/calendar; charset=utf-8',
